@@ -18,6 +18,7 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -37,10 +38,11 @@ public class VerificationCodeInput extends ViewGroup {
 
     private static final String TAG = "VerificationCodeInput";
     private int box = 4;
-    private int boxWidth = 120;
-    private int boxHeight = 120;
-    private int childHPadding = 14;
-    private int childVPadding = 14;
+    private int boxWidth = 0;
+    private int boxHeight = 0;
+    private int childHPadding = 0;
+    private int childVPadding = 0;
+    private int margin = 0;
     private String inputType = TYPE_PASSWORD;
     private Drawable boxBgFocus = null;
     private Drawable boxBgNormal = null;
@@ -51,14 +53,20 @@ public class VerificationCodeInput extends ViewGroup {
         super(context, attrs);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.vericationCodeInput);
         box = a.getInt(R.styleable.vericationCodeInput_box, 4);
-
         childHPadding = (int) a.getDimension(R.styleable.vericationCodeInput_child_h_padding, 0);
+        margin = (int) a.getDimension(R.styleable.vericationCodeInput_margin, 15);
         childVPadding = (int) a.getDimension(R.styleable.vericationCodeInput_child_v_padding, 0);
         boxBgFocus = a.getDrawable(R.styleable.vericationCodeInput_box_bg_focus);
         boxBgNormal = a.getDrawable(R.styleable.vericationCodeInput_box_bg_normal);
         inputType = a.getString(R.styleable.vericationCodeInput_inputType);
         boxWidth = (int) a.getDimension(R.styleable.vericationCodeInput_child_width, boxWidth);
         boxHeight = (int) a.getDimension(R.styleable.vericationCodeInput_child_height, boxHeight);
+
+        boxHeight = 120;
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        long totalwidth = displayMetrics.widthPixels;
+        boxWidth = (int) ((totalwidth - margin * 2) / box);
+
         initViews();
 
     }
